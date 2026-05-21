@@ -1,0 +1,63 @@
+USE PD221LabDatabase;
+SELECT * FROM Bus;
+INSERT INTO Bus (Bus_no, Source, Destination, Couch_type, Manufacture_year, SeatCapacity)
+VALUES
+('BUS55', 'GENSAN', 'DAVAO', 'DELUXE', 2017, 60),
+('BUS56', 'DAVAO', 'MARBEL', 'LUXURY', 2018, 40),
+('BUS57', 'MARBEL', 'GENSAN', 'LUXURY', 2020, 40),
+('BUS58', 'GENSAN', 'TACURONG', 'SEMI-LUXURY', 2023, 50),
+('BUS59', 'DAVAO', 'GENSAN', 'LUXURY', 2025, 40)
+ON DUPLICATE KEY UPDATE
+    Source = VALUES(Source),
+    Destination = VALUES(Destination),
+    Couch_type = VALUES(Couch_type),
+    Manufacture_year = VALUES(Manufacture_year),
+    SeatCapacity = VALUES(SeatCapacity);
+    SELECT * FROM Bus;
+    
+INSERT IGNORE INTO Bus (Bus_no, Source, Destination, Couch_type, Fair)
+VALUES
+('BUS59', 'GENSAN', 'DAVAO', 'LUXURY', 400),
+('BUS60', 'DAVAO', 'MARBEL', 'LUXURY', 350),
+('BUS61', 'MARBEL', 'GENSAN', 'LUXURY', 250),
+('BUS62', 'GENSAN', 'TACURONG', 'SEMI-LUXURY', 200),
+('BUS63', 'DAVAO', 'GENSAN', 'LUXURY', 400);
+UPDATE Bus SET SeatCapacity = 40 WHERE Bus_no IN ('BUS60', 'BUS61', 'BUS63');
+UPDATE Bus SET SeatCapacity = 50 WHERE Bus_no = 'BUS62';
+SELECT * FROM Bus;
+
+ALTER TABLE Bus
+ADD Status VARCHAR(20);
+
+UPDATE Bus SET Status = 'UNDER MAINTENANCE' 
+WHERE Manufacture_year BETWEEN 2000 AND 2005;
+
+UPDATE Bus SET Status = 'GOOD CONDITION' 
+WHERE Manufacture_year BETWEEN 2006 AND 2015;
+
+UPDATE Bus SET Status = 'PERFECT CONDITION' 
+WHERE Manufacture_year BETWEEN 2016 AND 2025;
+
+SELECT * FROM Bus;
+UPDATE Bus SET Manufacture_year = 2021 WHERE Bus_no = 'BUS61';
+UPDATE Bus SET Manufacture_year = 2022 WHERE Bus_no = 'BUS62';
+UPDATE Bus SET Manufacture_year = 2023 WHERE Bus_no = 'BUS63';
+
+UPDATE Bus SET Status = 'PERFECT CONDITION' 
+WHERE Manufacture_year BETWEEN 2016 AND 2025;
+UPDATE Bus SET Fair = 400, Source = 'GENSAN', Destination = 'DAVAO' 
+WHERE Bus_no = 'BUS59';
+SELECT * FROM Bus;
+UPDATE Bus 
+SET Source = 'DAVAO', Destination = 'MARBEL', Couch_type = 'LUXURY', Fair = 350
+WHERE Bus_no = 'BUS60';
+
+SELECT * FROM Bus;
+
+SELECT * FROM bus WHERE Fair<=400
+
+
+UPDATE Bus SET Fair = 130, Destination = 'Polomolok' WHERE Bus_no = 'BUS60';
+SELECT * FROM Bus WHERE Bus_no = 'BUS60';
+
+SELECT * FROM Bus

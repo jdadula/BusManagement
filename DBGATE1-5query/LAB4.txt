@@ -1,0 +1,113 @@
+USE PD221LabDatabase;
+SELECT * FROM Bus;
+CREATE TABLE bus_company (
+    Company_ID VARCHAR(10) PRIMARY KEY,
+    Company_name VARCHAR(50),
+    Address VARCHAR(100),
+    Contacts VARCHAR(20),
+    Email VARCHAR(50)
+);
+CREATE TABLE company_owner (
+    Owner_ID VARCHAR(10) PRIMARY KEY,
+    Owner_name VARCHAR(50),
+    Contacts VARCHAR(20),
+    Email VARCHAR(50)
+);
+
+INSERT INTO bus_company (Company_ID, Company_name, Address, Contacts, Email)
+VALUES
+('BZ301', 'Yellow Bus', 'DAVAO City', '801-4539', 'yellowbus@gmail.com'),
+('BZ302', 'Husky', 'Kidapawan', '09059094743', 'husky@hotmail.com'),
+('BZ303', 'Mindanao Star', 'General Santos City', '09169191234', 'mindanaostar.gmail.com'),
+('BZ304', 'Gensan Liners', 'General Santos City', '09329454342', 'Gensan_liners@yahoo.com'),
+('BZ305', 'Tuna Smasher', 'General Santos City', '09999194543', 'tunasmasher@tunasmasher.com');
+
+SELECT * FROM bus_company;
+
+INSERT INTO company_owner (Owner_ID, Owner_name, Contacts, Email)
+VALUES
+('OWN-0001', 'John Micheal Abando', '09169324512', 'John.abando@gmail.com'),
+('OWN-0002', 'Juan Dela Torre', '09329454321', 'DelaTorreJuan@tunasmasher.com'),
+('OWN-0003', 'Michelle Ann Rudriguez', '09089123456', 'Rudriquez_michelleann@gmail.com'),
+('OWN-0004', 'Farah Basa', '09998765432', 'farahbasa@hotmail.com');
+
+SELECT * FROM company_owner;
+
+CREATE TABLE company_owner_relation (
+    Company_ID VARCHAR(10),
+    Owner_ID VARCHAR(10),
+    PRIMARY KEY (Company_ID, Owner_ID),
+    FOREIGN KEY (Company_ID) REFERENCES bus_company(Company_ID),
+    FOREIGN KEY (Owner_ID) REFERENCES company_owner(Owner_ID)
+);
+
+INSERT INTO company_owner_relation (Company_ID, Owner_ID)
+VALUES
+('BZ301', 'OWN-0002'),
+('BZ302', 'OWN-0001'),
+('BZ303', 'OWN-0004'),
+('BZ304', 'OWN-0003'),
+('BZ305', 'OWN-0004');
+
+SELECT * FROM company_owner_relation;
+
+CREATE TABLE company_bus_relation (
+    Company_ID VARCHAR(10),
+    Bus_no VARCHAR(10),
+    PRIMARY KEY (Company_ID, Bus_no),
+    FOREIGN KEY (Company_ID) REFERENCES bus_company(Company_ID),
+    FOREIGN KEY (Bus_no) REFERENCES Bus(Bus_no)
+);
+
+INSERT INTO company_bus_relation (Company_ID, Bus_no)
+VALUES
+('BZ301', 'BUS53'),
+('BZ302', 'BUS54'),
+('BZ303', 'BUS55'),
+('BZ304', 'BUS56'),
+('BZ305', 'BUS57'),
+('BZ301', 'BUS59'),
+('BZ302', 'BUS60'),
+('BZ303', 'BUS61'),
+('BZ304', 'BUS62'),
+('BZ305', 'BUS63');
+
+SELECT * FROM company_bus_relation;
+
+SELECT * FROM bus_company;
+SELECT * FROM company_owner;
+SELECT * FROM company_owner_relation;
+SELECT * FROM company_bus_relation;
+
+SELECT 
+    co.Owner_ID,
+    co.Owner_name,
+    co.Contacts,
+    bc.Company_name,
+    cbr.Bus_no,
+    b.Source,
+    b.Destination,
+    b.Couch_type,
+    b.Fair
+FROM company_owner co
+INNER JOIN company_owner_relation cor ON co.Owner_ID = cor.Owner_ID
+INNER JOIN bus_company bc ON cor.Company_ID = bc.Company_ID
+INNER JOIN company_bus_relation cbr ON bc.Company_ID = cbr.Company_ID
+INNER JOIN Bus b ON cbr.Bus_no = b.Bus_no
+ORDER BY co.Owner_ID;
+
+SELECT 
+    bc.Company_ID,
+    bc.Company_name,
+    bc.Address,
+    cbr.Bus_no,
+    b.Source,
+    b.Destination,
+    b.Couch_type,
+    b.Fair,
+    b.SeatCapacity,
+    b.Status
+FROM bus_company bc
+INNER JOIN company_bus_relation cbr ON bc.Company_ID = cbr.Company_ID
+INNER JOIN Bus b ON cbr.Bus_no = b.Bus_no
+ORDER BY bc.Company_ID;

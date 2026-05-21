@@ -1,0 +1,91 @@
+USE PD221LabDatabase;
+SELECT * FROM Bus;
+
+CREATE TABLE status (
+    status_ID   VARCHAR(10)  PRIMARY KEY,
+    status      VARCHAR(20),
+    description VARCHAR(100)
+);
+
+INSERT INTO status (status_ID, status, description)
+VALUES
+('ST001', 'UNDER MAINTENANCE', 'Bus is currently undergoing repair and is not operational'),
+('ST002', 'GOOD CONDITION',    'Bus is operational with minor wear but safe to use'),
+('ST003', 'PERFECT CONDITION', 'Bus is brand new or fully serviced and in top condition'),
+('ST004', 'OUT OF SERVICE',    'Bus has been permanently retired from operation'),
+('ST005', 'RESERVED',          'Bus is temporarily reserved for a special trip or event');
+
+SELECT * FROM status;
+
+CREATE TABLE bus_status (
+    bus_status_id VARCHAR(10) PRIMARY KEY,
+    bus_number    VARCHAR(10),
+    status_id     VARCHAR(10),
+    FOREIGN KEY (bus_number) REFERENCES Bus(Bus_no),
+    FOREIGN KEY (status_id)  REFERENCES status(status_ID)
+);
+
+INSERT INTO bus_status (bus_status_id, bus_number, status_id)
+VALUES
+('BS001', 'BUS53', 'ST002'),
+('BS002', 'BUS54', 'ST002'),
+('BS003', 'BUS55', 'ST003'),
+('BS004', 'BUS56', 'ST003'),
+('BS005', 'BUS57', 'ST003'),
+('BS006', 'BUS58', 'ST003'),
+('BS007', 'BUS59', 'ST003'),
+('BS008', 'BUS60', 'ST003'),
+('BS009', 'BUS61', 'ST003'),
+('BS010', 'BUS62', 'ST003'),
+('BS011', 'BUS63', 'ST003');
+
+SELECT * FROM bus_status;
+
+SELECT 
+    co.Owner_ID,
+    co.Owner_name,
+    co.Contacts,
+    bc.Company_name,
+    cbr.Bus_no,
+    b.Source,
+    b.Destination,
+    b.Couch_type,
+    b.Fair,
+    s.status        AS Bus_Status,
+    s.description   AS Status_Description
+FROM company_owner co
+INNER JOIN company_owner_relation cor ON co.Owner_ID    = cor.Owner_ID
+INNER JOIN bus_company            bc  ON cor.Company_ID = bc.Company_ID
+INNER JOIN company_bus_relation   cbr ON bc.Company_ID  = cbr.Company_ID
+INNER JOIN Bus                    b   ON cbr.Bus_no     = b.Bus_no
+INNER JOIN bus_status             bs  ON b.Bus_no       = bs.bus_number
+INNER JOIN status                 s   ON bs.status_id   = s.status_ID
+ORDER BY co.Owner_ID;
+
+SELECT 
+    bc.Company_ID,
+    bc.Company_name,
+    bc.Address,
+    cbr.Bus_no,
+    b.Source,
+    b.Destination,
+    b.Couch_type,
+    b.Fair,
+    b.SeatCapacity,
+    s.status        AS Bus_Status,
+    s.description   AS Status_Description
+FROM bus_company bc
+INNER JOIN company_bus_relation cbr ON bc.Company_ID = cbr.Company_ID
+INNER JOIN Bus                  b   ON cbr.Bus_no    = b.Bus_no
+INNER JOIN bus_status           bs  ON b.Bus_no      = bs.bus_number
+INNER JOIN status               s   ON bs.status_id  = s.status_ID
+ORDER BY bc.Company_ID; 
+
+-- This shows all your data to verify
+USE PD221LabDatabase;
+SELECT * FROM Bus;
+SELECT * FROM users;
+SELECT * FROM Drivers;
+SELECT * FROM Tickets;
+SELECT * FROM Transactions;
+    

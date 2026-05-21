@@ -1,0 +1,15 @@
+CREATE DATABASE PD221LabDatabase;
+USE PD221LabDatabase;
+CREATE TABLE Bus (
+    Bus_no INT PRIMARY KEY,
+    Source VARCHAR(50),
+    Destination VARCHAR(50),
+    Couch_type VARCHAR(20),
+    Fair DECIMAL(10,2)
+);
+ALTER TABLE Bus
+ADD SeatCapacity INT;
+ALTER TABLE Bus
+CHANGE Couch_type Couch_type VARCHAR(26),
+ADD Manufacture_year INT;
+SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = 'PD221LabDatabase';

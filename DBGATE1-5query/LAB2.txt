@@ -1,0 +1,38 @@
+SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA 
+WHERE SCHEMA_NAME = 'PD221LabDatabase';
+USE PD221LabDatabase;
+SELECT * FROM Bus;
+ALTER TABLE Bus
+MODIFY Bus_no VARCHAR(10);
+INSERT INTO Bus (Bus_no, Source, Destination, Couch_type, Fair) VALUES
+('BUS53', 'GENSAN', 'DAVAO', 'DELUXE', 250.75),
+('BUS54', 'DAVAO', 'MARBEL', 'LUXURY', 425.50),
+('BUS55', 'MARBEL', 'GENSAN', 'DELUXE', 100.00),
+('BUS56', 'GENSAN', 'TACURONG', 'SEMI-LUXURY', 250.00),
+('BUS57', 'DAVAO', 'GENSAN', 'LUXURY', 300.00);
+SELECT * FROM Bus;
+UPDATE Bus SET SeatCapacity = 60 WHERE Couch_type = 'DELUXE';
+UPDATE Bus SET SeatCapacity = 40 WHERE Couch_type = 'LUXURY';
+UPDATE Bus SET SeatCapacity = 50 WHERE Couch_type = 'SEMI-LUXURY';
+SELECT * FROM Bus;
+UPDATE Bus SET Manufacture_year = 2015 WHERE Bus_no = 'BUS53';
+UPDATE Bus SET Manufacture_year = 2010 WHERE Bus_no = 'BUS54';
+UPDATE Bus SET Manufacture_year = 2005 WHERE Bus_no = 'BUS55';
+UPDATE Bus SET Manufacture_year = 2020 WHERE Bus_no = 'BUS56';
+UPDATE Bus SET Manufacture_year = 2021 WHERE Bus_no = 'BUS57';
+SELECT * FROM Bus;
+SELECT * FROM Bus WHERE Couch_type = 'LUXURY' AND Fair < 400;
+INSERT IGNORE INTO Bus (Bus_no, Source, Destination, Manufacture_year, Couch_type, Fair) VALUES
+('BUS58', 'GENSAN', 'DAVAO', 2015, 'LUXURY', 250.75),
+('BUS59', 'DAVAO', 'MARBEL', 2010, 'LUXURY', 425.50),
+('BUS55', 'MARBEL', 'GENSAN', 2005, 'SEMI-LUXURY', 100.00),
+('BUS53', 'GENSAN', 'TACURONG', 2020, 'SEMI-LUXURY', 250.00),
+('BUS60', 'DAVAO', 'GENSAN', 2021, 'DELUXE', 300.00);
+SELECT * FROM Bus;
+UPDATE Bus SET SeatCapacity = 40 WHERE Bus_no = 'BUS58';
+UPDATE Bus SET SeatCapacity = 40 WHERE Bus_no = 'BUS59';
+UPDATE Bus SET SeatCapacity = 60 WHERE Bus_no = 'BUS60';
+UPDATE Bus SET Fair = 250.75 WHERE Bus_no = 'BUS58';
+UPDATE Bus SET Fair = 425.50 WHERE Bus_no = 'BUS59';
+UPDATE Bus SET Fair = 300.00 WHERE Bus_no = 'BUS60';
+SELECT * FROM Bus;
